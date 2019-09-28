@@ -1,5 +1,12 @@
 .App {
   text-align: center;
+  background-color: white;
+  min-width: 500px;
+  min-height: 700px;
+  height: 100vh;
+  box-sizing: border-box;
+  font: inherit;
+  color: black;
 }
 
 .App-logo {
@@ -14,9 +21,27 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-link {
   color: #09d3ac;
+}
+
+.navbar {
+  background-color: #282c34;
+  padding: 5px;
+  color: white;
+}
+
+.aside {
+  float: left;
+  padding: 30px;
+  background-color: rgb(56, 4, 56);
+  height: 100vh;
+  min-width: 20vh;
+  color: white;
+}
+
+.searchBar {
+  width: 200px;
 }
