@@ -1,37 +1,56 @@
 import React, { Component } from 'react';
 import './App.css';
-import Card from './MtgCard/MtgCard';
+import CardDisplay from './CardDisplay/CardDisplay';
 import SearchBar from './SearchBar/SearchBar';
-//import logo from './logo.svg';
 
 class App extends Component {
   state = ({
-    cardname: "",
-    searchtext: "",
-    binder: []
+    cardname: '',
+    uri: '',
+    name: '',
+    type: '',
+    price: '',
+    foil_price: '',
+    binder: [],
   })
 
   //=====SearchBar methods ==================================
   // Deal with searchbar input text change
   textChangeHandler = event => {
-    this.setState({cardname: ""})
-    this.setState({searchtext: event.target.value})
+    this.setState({cardname: event.target.value})
   }
 
   // Set the cardname to search for
   onClickHandler_Search = () => {
-    let searchText = this.state.searchtext
-    this.setState({cardname: searchText})
+    this.getCard()
   }
   //=========================================================
 
-  resetCardName = () => {
-    this.setState({cardname: ""})
+  //=====Card functions =====================================
+  // Fetch card information from json in target url
+  getCardInfo = targetUrl => {
+    fetch(targetUrl)
+    .then(response => response.json())
+    .then(jsonData => {
+        this.setState({uri: jsonData['image_uris']['large']})
+        this.setState({name: jsonData['name']})
+        this.setState({type: jsonData['type_line']})
+        this.setState({price: jsonData['prices']['usd']})
+        this.setState({foil_price: jsonData['prices']['usd_foil']})
+    })
+    .catch(error => {console.log("ERROR: targetUrl not found")})
   }
 
+  // Prepper for getCardInfo
+  getCard = () => {
+      let targetUrl = 'https://api.scryfall.com/cards/named?exact='.concat(this.state.cardname); 
+      this.getCardInfo(targetUrl)
+  }
+  //=========================================================
+
+  // Add the card obj(dict) to binder array
   onClickHandler_Add = () => {
-    //this.setState({binder: [<Card cardName={this.state.cardname}/>]})
-    //console.log(this.state.binder[0]);
+
   }
 
   render() {
@@ -39,8 +58,8 @@ class App extends Component {
       <div className="App">
         <nav className="navbar"><p>nav bar</p></nav>
         <aside className="aside">aside</aside>
-        <SearchBar changed={this.textChangeHandler} clicked={this.onClickHandler_Search} searchtext={this.state.searchtext}/>
-        <Card cardName={this.state.cardname} reset={this.resetCardName}/>
+        <SearchBar changed={this.textChangeHandler} clicked={this.onClickHandler_Search} searchtext={this.state.cardname}/>
+        <CardDisplay cardName={this.state.cardname} reset={this.resetCardName} uri={this.state.uri}/>
       </div>
     );
   }
