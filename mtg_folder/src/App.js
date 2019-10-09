@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import CardDisplay from './CardDisplay/CardDisplay';
-import SearchBar from './SearchBar/SearchBar';
+import Cockpit from './Cockpit/Cockpit';
 
 class App extends Component {
   state = ({
@@ -12,6 +12,7 @@ class App extends Component {
     price: '',
     foil_price: '',
     binder: [],
+    sorted: true,
   })
 
   //=====SearchBar methods ==================================
@@ -48,9 +49,32 @@ class App extends Component {
   }
   //=========================================================
 
-  // Add the card obj(dict) to binder array
+  // Add the card obj to binder array
   onClickHandler_Add = () => {
+	const card = {	cardname: this.state.cardname,
+		uri: this.state.cardname,
+		type: this.state.type,
+		price: this.state.price,
+		foil_price: this.state.foil_price,	}
+	const newBinder = [...this.state.binder]
+	newBinder.push(card);
+	this.setState({ binder: newBinder, sorted: false });
+  }
 
+  // Remove last element of binder. 
+  // Throw an alert and exit when binder is empty or already sorted.
+  onClickHandler_Undo = () => {
+	if(this.state.binder.length === 0) {
+		this.setState({ sorted: true });
+	}
+	setTimeout(() => {
+		if(this.state.sorted === false) {
+			const newBinder = [...this.state.binder]
+			const card = newBinder.pop();
+			this.setState({ binder: newBinder });
+			console.log(card.cardname, 'removed from binder');
+		} else { alert('Binder already sorted: Can\'t Undo'); }
+	}, 100);
   }
 
   render() {
@@ -58,8 +82,16 @@ class App extends Component {
       <div className="App">
         <nav className="navbar"><p>nav bar</p></nav>
         <aside className="aside">aside</aside>
-        <SearchBar changed={this.textChangeHandler} clicked={this.onClickHandler_Search} searchtext={this.state.cardname}/>
-        <CardDisplay cardName={this.state.cardname} reset={this.resetCardName} uri={this.state.uri}/>
+        <Cockpit 
+				changed={this.textChangeHandler} 
+				clicked={this.onClickHandler_Search} 
+				searchtext={this.state.cardname}
+				add_click={this.onClickHandler_Add}
+				undo_click={this.onClickHandler_Undo} />
+        <CardDisplay 
+				cardName={this.state.cardname} 
+				reset={this.resetCardName} 
+				uri={this.state.uri} />
       </div>
     );
   }

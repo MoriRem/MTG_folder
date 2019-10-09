@@ -1,0 +1,20 @@
+.searchBar {
+    width: 200px;
+}
+
+.Button_Search {
+	min-width: 60px;
+	width: 100px;
+}
+
+.Button_Add {
+	min-width: 60px;
+	width: 60px;
+	margin: 5px;
+}
+
+.Button_Undo {
+	min-width: 60px;
+	width: 60px;
+	margin: 5px;
+}
